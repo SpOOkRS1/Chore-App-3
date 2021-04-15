@@ -44,9 +44,9 @@ db.create_all()
 
 
 @app.route('/')
-def index():
+def login():
 
-  return render_template('index.html')
+  return render_template('login.html')
 
 @app.route('/admin')
 def admin():
