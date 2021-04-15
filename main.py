@@ -42,8 +42,12 @@ class User(db.Model):
 db.create_all()
 #####################################################
 
-
 @app.route('/')
+def home():
+
+  return render_template('home.html')
+
+@app.route('/login')
 def login():
 
   return render_template('login.html')
