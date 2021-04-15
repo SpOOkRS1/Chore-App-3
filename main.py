@@ -53,9 +53,6 @@ def admin():
 
   return render_template('admin.html')
 
-if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
-
 # Creating a route for the add page
 @app.route('/add')
 def add():
@@ -82,6 +79,10 @@ def added():
   userList = User.query.all()
   # Render the template passing in the user list and the message
   return render_template('index.html',userList=userList,message=message)
+
+if __name__ == '__main__':
+    app.run(debug=True,host='0.0.0.0')
+
 
 
 # As of April 5, 2021 this is the last line of code that has been written. Every thing as of right now works.
