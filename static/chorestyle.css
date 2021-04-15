@@ -78,6 +78,10 @@ button{
   border-color: white;
 }
 
+#choreTable{
+  color: #00C2FF;
+}
+
 .blue-container{
     width: 80%;
     height: 80%;
