@@ -3,7 +3,8 @@
 ###################################################
 #importing what we need 
 import os
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, redirect, url_for
+from flask_login import current_user, login_user, LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
 # creating an instance of a flask application.
@@ -29,7 +30,7 @@ class Name(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.String(10000))
     names = db.Column(db.Text)
-
+    name_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class User(db.Model): 
   id = db.Column(db.Integer, primary_key=True)
@@ -44,6 +45,12 @@ class User(db.Model):
 
 db.create_all()
 #####################################################
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
+@login_manager.user_loader
+def load_user(id):
+  return User.query.get(int(id))
 
 @app.route('/')
 def home():
@@ -58,17 +65,25 @@ def login():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if request.method == 'POST':
-        name = request.form.get('note')
-        
-        if len(name) < 1:
+        name = request.form.get('name')
+
+        if len(name) <= 1:
             flash('Name is too short!', category='error')
         else:
-            new_name = Name(data=name)
+            new_name = Name(data=name, name_id=current_user.id)
             db.session.add(new_name)
             db.session.commit()
             flash('Name added!', category='success')
 
     return render_template("admin.html")
+
+
+@app.route('/adlogin', methods=['GET', 'POST'])
+def adlogin():
+    if request.method == 'POST':
+      flash('Logged in successfully!', category='success')
+      return redirect(url_for('admin'))
+    return render_template('adlogin.html', user=current_user)
 
 # Creating a route for the add page
 @app.route('/add')
@@ -98,8 +113,8 @@ def added():
   return render_template('index.html',userList=userList,message=message)
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
-
+  app.secret_key = 'super secret key'
+  app.run(debug=True,host='0.0.0.0')
 
 
 # As of April 5, 2021 this is the last line of code that has been written. Every thing as of right now works.
