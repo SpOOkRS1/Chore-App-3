@@ -3,7 +3,7 @@
 ###################################################
 #importing what we need 
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 
 # creating an instance of a flask application.
@@ -25,19 +25,22 @@ db = SQLAlchemy(app)
 ##################################################
 # Creating a User Table
 ##################################################
+class Name(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    data = db.Column(db.String(10000))
+    names = db.Column(db.Text)
+
 
 class User(db.Model): 
-
-  id = db.Column(db.Integer,primary_key=True)
-  code = db.Column(db.Text)
+  id = db.Column(db.Integer, primary_key=True)
   description = db.Column(db.Text)
+  names = db.relationship('Name')
 
-  def __init__(self,code,description):
-    self.code = code
+  def __init__(self,description):
     self.description = description
   
   def __repr__(self):
-    return (f"Code: {self.code} Description:{self.description}")
+    return (f"Description:{self.description}")
 
 db.create_all()
 #####################################################
@@ -52,10 +55,20 @@ def login():
 
   return render_template('login.html')
 
-@app.route('/admin')
+@app.route('/admin', methods=['GET', 'POST'])
 def admin():
+    if request.method == 'POST':
+        name = request.form.get('note')
+        
+        if len(name) < 1:
+            flash('Name is too short!', category='error')
+        else:
+            new_name = Name(data=name)
+            db.session.add(new_name)
+            db.session.commit()
+            flash('Name added!', category='success')
 
-  return render_template('admin.html')
+    return render_template("admin.html")
 
 # Creating a route for the add page
 @app.route('/add')
