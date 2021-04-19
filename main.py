@@ -26,22 +26,15 @@ db = SQLAlchemy(app)
 ##################################################
 # Creating a User Table
 ##################################################
-class Name(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.String(10000))
-    names = db.Column(db.Text)
-    name_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+class Namez(db.Model): 
+  id = db.Column(db.Integer,primary_key=True)
+  name = db.Column(db.Text)
 
-class User(db.Model): 
-  id = db.Column(db.Integer, primary_key=True)
-  description = db.Column(db.Text)
-  names = db.relationship('Name')
-
-  def __init__(self,description):
-    self.description = description
+  def __init__(self,name):
+    self.name = name
   
   def __repr__(self):
-    return (f"Description:{self.description}")
+    return (f"NAME:{self.name}")
 
 db.create_all()
 #####################################################
@@ -50,7 +43,7 @@ login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(id):
-  return User.query.get(int(id))
+  return Namez.query.get(int(id))
 
 @app.route('/')
 def home():
@@ -64,18 +57,8 @@ def login():
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    if request.method == 'POST':
-        name = request.form.get('name')
-
-        if len(name) <= 1:
-            flash('Name is too short!', category='error')
-        else:
-            new_name = Name(data=name, name_id=current_user.id)
-            db.session.add(new_name)
-            db.session.commit()
-            flash('Name added!', category='success')
-
-    return render_template("admin.html")
+  userList = Namez.query.all()
+  return render_template("admin.html", userList=userList)
 
 
 @app.route('/adlogin', methods=['GET', 'POST'])
@@ -83,4 +66,25 @@ def adlogin():
     if request.method == 'POST':
       flash('Logged in successfully!', category='success')
       return redirect(url_for('admin'))
-    return render_template('adlogin.html', user=current_user)
+    return render_template('adlogin.html')
+
+@app.route('/add')
+def add():
+  return render_template('add.html')
+
+@app.route('/added')
+def added():
+  name = request.args.get('name')
+  newPerson = Namez(name)
+  db.session.add(newPerson)
+  db.session.commit()
+  userList = Namez.query.all()
+  return render_template('admin.html',userList=userList)
+
+######################################################################
+if __name__ == '__main__':
+  app.secret_key = 'super secret key'
+  app.run(debug=True,host='0.0.0.0')
+
+
+# As of April 5, 2021 this is the last line of code that has been written. Every thing as of right now works.

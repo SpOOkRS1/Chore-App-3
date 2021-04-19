@@ -1,19 +1,22 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} 
 {% block content%}
-<h1>This is the admin page</h1>
+<h1>This page displays names for the admin</h1>
+<br>
 <h1 align="center">Names</h1>
-<ul class="list-group list-group-flush" id="notes">
-   {% for name in Name %}
-   <li class="list-group-item">
-      {{ name.data }}
-   </li>
-   {% endfor %}
-</ul>
-<form method="POST">
-   <textarea name="name" id="name" class="form-control"></textarea>
-   <br />
-   <div align="center">
-      <button type="submit" class="btn btn-primary">Add Name</button>
-   </div>
-</form>
+<table class="table">
+   <thead>
+      <tr>
+         <th scope="col">#ID</th>
+         <th scope="col">Name</th>
+      </tr>
+   </thead>
+   <tbody>
+      {%for person in userList%}
+      <tr>
+         <th scope="row">{{person.id}}</th>
+         <td>{{person.name}}</td>
+      </tr>
+      {%endfor%}
+   </tbody>
+</table>
 {% endblock %}
