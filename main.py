@@ -4,8 +4,9 @@
 #importing what we need 
 import os
 from flask import Flask, render_template, request, flash, redirect, url_for
-from flask_login import current_user, login_user, LoginManager, UserMixin
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # creating an instance of a flask application.
 app = Flask(__name__)
@@ -36,14 +37,24 @@ class Namez(db.Model):
   def __repr__(self):
     return (f"NAME:{self.name}")
 
+class Admin(db.Model, UserMixin): 
+  id = db.Column(db.Integer,primary_key=True)
+  adname = db.Column(db.String(150))
+
+  def __init__(self,adname):
+    self.adname = adname
+  
+  def __repr__(self):
+    return (f"ADNAME: {self.adname}")
+
 db.create_all()
 #####################################################
 login_manager = LoginManager()
-login_manager.login_view = 'auth.login'
+login_manager.login_view = 'adlogin.html'
 login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(id):
-  return Namez.query.get(int(id))
+  return Admin.query.get(int(id))
 
 @app.route('/')
 def home():
@@ -80,6 +91,31 @@ def added():
   db.session.commit()
   userList = Namez.query.all()
   return render_template('admin.html',userList=userList)
+
+@app.route('/adsign-up', methods=['GET', 'POST'])
+def adsign_up():
+    if request.method == 'POST':
+        adname = request.form.get('adname')
+
+        admin = Admin.query.filter_by(adname=adname).first()
+        if admin:
+            flash('Admin already exists', category='error')
+        elif len(adname) < 2:
+            flash('Firstname must be longer than 1 character.', category = 'error')
+        #elif password1 != password2:
+            #flash('Passwords do not match.', category = 'error')
+        #elif len(password1) < 7:
+            #flash('Password must be longer than 6 characters.', category = 'error')
+        else:
+            # add user to the data base
+            new_admin = Admin(adname=adname)
+            db.session.add(new_admin)
+            db.session.commit()
+            login_user(new_admin, remember=True)
+            flash(f'Account created! Welcome {new_admin}', category = 'success')
+            return redirect(url_for('admin'))
+
+    return render_template('adsign_up.html', user=current_user)
 
 ######################################################################
 if __name__ == '__main__':
