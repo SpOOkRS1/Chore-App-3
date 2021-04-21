@@ -41,6 +41,9 @@ class Admin(db.Model, UserMixin):
   id = db.Column(db.Integer,primary_key=True)
   adname = db.Column(db.String(150))
 
+  def is_authenticated(self):
+    return True
+
   def __init__(self,adname):
     self.adname = adname
   
