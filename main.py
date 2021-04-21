@@ -69,32 +69,6 @@ def login():
 
   return render_template('login.html')
 
-@app.route('/admin', methods=['GET', 'POST'])
-def admin():
-  userList = Namez.query.all()
-  return render_template("admin.html", userList=userList)
-
-
-@app.route('/adlogin', methods=['GET', 'POST'])
-def adlogin():
-    if request.method == 'POST':
-      flash('Logged in successfully!', category='success')
-      return redirect(url_for('admin'))
-    return render_template('adlogin.html')
-
-@app.route('/add')
-def add():
-  return render_template('add.html')
-
-@app.route('/added')
-def added():
-  name = request.args.get('name')
-  newPerson = Namez(name)
-  db.session.add(newPerson)
-  db.session.commit()
-  userList = Namez.query.all()
-  return render_template('admin.html',userList=userList)
-
 @app.route('/adsign-up', methods=['GET', 'POST'])
 def adsign_up():
     if request.method == 'POST':
@@ -119,6 +93,46 @@ def adsign_up():
             return redirect(url_for('admin'))
 
     return render_template('adsign_up.html', user=current_user)
+
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+  userList = Namez.query.all()
+  return render_template("admin.html", userList=userList)
+
+
+
+@app.route('/adlogin', methods=['GET', 'POST'])
+def adlogin():
+    if request.method == 'POST':
+      adname = request.form.get('adname')
+
+      admin = Admin.query.filter_by(adname=adname).first()
+      if admin:
+        flash(f'Logged in successfully! Welcome {adname}!', category='success')
+        login_user(admin, remember=True)
+        return redirect(url_for('admin'))
+      else:
+        flash('Admin does not exist', category='error')
+
+    return render_template('adlogin.html')
+
+
+
+@app.route('/add')
+def add():
+  return render_template('add.html')
+
+
+
+@app.route('/added')
+def added():
+  name = request.args.get('name')
+  newPerson = Namez(name)
+  db.session.add(newPerson)
+  db.session.commit()
+  userList = Namez.query.all()
+  return render_template('admin.html',userList=userList)
 
 ######################################################################
 if __name__ == '__main__':

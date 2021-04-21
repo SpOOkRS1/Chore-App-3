@@ -92,6 +92,14 @@ version = "1.1.1"
 
 [[package]]
 category = "main"
+description = "Convert python objects to a human readable format"
+name = "ppretty"
+optional = false
+python-versions = "*"
+version = "1.3"
+
+[[package]]
+category = "main"
 description = "Database Abstraction Library"
 name = "sqlalchemy"
 optional = false
@@ -136,7 +144,7 @@ dev = ["pytest", "pytest-timeout", "coverage", "tox", "sphinx", "pallets-sphinx-
 watchdog = ["watchdog"]
 
 [metadata]
-content-hash = "4d4be4ae4e88e75f9cd70ec6629c93c80bf1d08a785e401ebbf507aaf507debc"
+content-hash = "593b2b36e9ada27ead7ca30a9802b7eb329a0909a19423ae86a80953c7948775"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -262,6 +270,9 @@ markupsafe = [
     {file = "MarkupSafe-1.1.1-cp39-cp39-win32.whl", hash = "sha256:22c178a091fc6630d0d045bdb5992d2dfe14e3259760e713c490da5323866c39"},
     {file = "MarkupSafe-1.1.1-cp39-cp39-win_amd64.whl", hash = "sha256:b7d644ddb4dbd407d31ffb699f1d140bc35478da613b441c582aeb7c43838dd8"},
     {file = "MarkupSafe-1.1.1.tar.gz", hash = "sha256:29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b"},
+]
+ppretty = [
+    {file = "ppretty-1.3.zip", hash = "sha256:a5fbe17b9ae9efb9a8d76423d84c7c5af7130b08e6c3b28078ec25c244f883e5"},
 ]
 sqlalchemy = [
     {file = "SQLAlchemy-1.4.9-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:e26791ac43806dec1f18d328596db87f1b37f9d8271997dd1233054b4c377f51"},
