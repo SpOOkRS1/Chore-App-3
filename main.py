@@ -37,7 +37,7 @@ class Maids(db.Model):
   def __repr__(self):
     return (f"NAME:{self.name}")
 
-class Admin(db.Model, UserMixin): 
+class Admins(db.Model, UserMixin): 
   id = db.Column(db.Integer,primary_key=True)
   username = db.Column(db.String(150))
 
@@ -57,7 +57,7 @@ login_manager.login_view = 'adlogin'
 login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(id):
-  return Admin.query.get(int(id))
+  return Admins.query.get(int(id))
 
 @app.route('/')
 def home():
@@ -74,7 +74,7 @@ def adsign_up():
     if request.method == 'POST':
         username = request.form.get('username')
 
-        admin = Admin.query.filter_by(username=username).first()
+        admin = Admins.query.filter_by(username=username).first()
         if admin:
             flash('Admin already exists', category='error')
         elif len(username) < 2:
@@ -85,7 +85,7 @@ def adsign_up():
             #flash('Password must be longer than 6 characters.', category = 'error')
         else:
             # add user to the data base
-            new_admin = Admin(username=username)
+            new_admin = Admins(username=username)
             db.session.add(new_admin)
             db.session.commit()
             login_user(new_admin, remember=True)
@@ -108,7 +108,7 @@ def adlogin():
     if request.method == 'POST':
       username = request.form.get('username')
 
-      admin = Admin.query.filter_by(username=username).first()
+      admin = Admins.query.filter_by(username=username).first()
       if admin:
         flash(f'Logged in successfully! Welcome {username}!', category='success')
         login_user(admin, remember=True)
