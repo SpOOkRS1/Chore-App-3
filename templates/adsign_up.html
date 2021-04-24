@@ -2,12 +2,15 @@
 {% block content %}
 <form method="POST">
     <h3 align="center">Sign Up</h3>
+    <br>
     <div class ="form-group">
-        <label for="adname">First Name</label>
-        <input type="text" class="form-control" id="adname" name="adname" placeholder="Enter first name">
+        <label for="username">Enter a username</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
     </div>
     <br>
-    <button type="submit" class="btn btn-primary">Submit
+    <button type="submit" class="cta">Submit
     </button>
+    <p>or</p>
+    <a class="nav-link" href="/adlogin">Login</a>
 </form>
 {% endblock %}

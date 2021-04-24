@@ -1,9 +1,8 @@
 <!-- 
-  Goal: 
-    Add logout funtionality
-    Add nav bar for admin and user
-   -->
-   
+   Goal: 
+     Add logout funtionality for admin
+     Add nav bar for admin and user
+    -->
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -16,15 +15,21 @@
       <link rel="stylesheet" href="static/chorestyle.css">
    </head>
    <body>
-      <div class= "container">
-         <div class="collapse navbar-collapse" id="navbar">
-            <div class="navbar-nav">
-               {% if current_user.is_authenticated %}
-               <li class="nav-item"> <a class="nav-link" href='/admin'> Home </a> </li>
-               <li class="nav-item"> <a class="nav-link" href='/add'> Add </a> </li>
-               {% endif %}
+      <nav class="navbar navbar-expand-lg navbar-light bg-light" id = "navtabs">
+         <div class="container-fluid">
+            <a class="navbar-brand" href="/">Maiden</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+               <div class="navbar-nav">
+                  <a class="nav-link active" aria-current="page" href="/">Home</a>
+                  <a class="nav-link" href="/adlogin">Admin</a>
+               </div>
             </div>
          </div>
+      </nav>
+      <div class= "container">
          {% with messages = get_flashed_messages(with_categories=true) %}
          {% if messages %}
          {% for category, message in messages %}
@@ -46,18 +51,12 @@
          {% endfor %}
          {% endif %}
          {% endwith %}
-         <!--always choose vector images opposed to jpeg and png-->
       </div>
       <center>
-         <div class= "blue-container">
-            <h1 color= >January</h1>
-            <hr color="black">
-            <div class="container">
-               {% block content %}
-               {% endblock %}
-            </div>
+        <div class="container">
+          {% block content %}
+          {% endblock %}
          </div>
       </center>
-      <!-- @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600'); -->
    </body>
 </html>

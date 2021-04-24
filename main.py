@@ -27,7 +27,7 @@ db = SQLAlchemy(app)
 ##################################################
 # Creating a User Table
 ##################################################
-class Namez(db.Model): 
+class Maids(db.Model): 
   id = db.Column(db.Integer,primary_key=True)
   name = db.Column(db.Text)
 
@@ -39,21 +39,21 @@ class Namez(db.Model):
 
 class Admin(db.Model, UserMixin): 
   id = db.Column(db.Integer,primary_key=True)
-  adname = db.Column(db.String(150))
+  username = db.Column(db.String(150))
 
   def is_authenticated(self):
     return True
 
-  def __init__(self,adname):
-    self.adname = adname
+  def __init__(self,username):
+    self.username = username
   
   def __repr__(self):
-    return (f"ADNAME: {self.adname}")
+    return (f"USERNAME: {self.username}")
 
 db.create_all()
 #####################################################
 login_manager = LoginManager()
-login_manager.login_view = 'adlogin.html'
+login_manager.login_view = 'adlogin'
 login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(id):
@@ -72,12 +72,12 @@ def login():
 @app.route('/adsign-up', methods=['GET', 'POST'])
 def adsign_up():
     if request.method == 'POST':
-        adname = request.form.get('adname')
+        username = request.form.get('username')
 
-        admin = Admin.query.filter_by(adname=adname).first()
+        admin = Admin.query.filter_by(username=username).first()
         if admin:
             flash('Admin already exists', category='error')
-        elif len(adname) < 2:
+        elif len(username) < 2:
             flash('Firstname must be longer than 1 character.', category = 'error')
         #elif password1 != password2:
             #flash('Passwords do not match.', category = 'error')
@@ -85,7 +85,7 @@ def adsign_up():
             #flash('Password must be longer than 6 characters.', category = 'error')
         else:
             # add user to the data base
-            new_admin = Admin(adname=adname)
+            new_admin = Admin(username=username)
             db.session.add(new_admin)
             db.session.commit()
             login_user(new_admin, remember=True)
@@ -96,8 +96,9 @@ def adsign_up():
 
 
 @app.route('/admin', methods=['GET', 'POST'])
+@login_required
 def admin():
-  userList = Namez.query.all()
+  userList = Maids.query.all()
   return render_template("admin.html", userList=userList)
 
 
@@ -105,17 +106,24 @@ def admin():
 @app.route('/adlogin', methods=['GET', 'POST'])
 def adlogin():
     if request.method == 'POST':
-      adname = request.form.get('adname')
+      username = request.form.get('username')
 
-      admin = Admin.query.filter_by(adname=adname).first()
+      admin = Admin.query.filter_by(username=username).first()
       if admin:
-        flash(f'Logged in successfully! Welcome {adname}!', category='success')
+        flash(f'Logged in successfully! Welcome {username}!', category='success')
         login_user(admin, remember=True)
         return redirect(url_for('admin'))
       else:
         flash('Admin does not exist', category='error')
 
     return render_template('adlogin.html')
+
+
+@app.route('/adlogout')
+@login_required
+def adlogout():
+    logout_user()
+    return redirect(url_for('adlogin'))
 
 
 
@@ -128,10 +136,10 @@ def add():
 @app.route('/added')
 def added():
   name = request.args.get('name')
-  newPerson = Namez(name)
+  newPerson = Maids(name)
   db.session.add(newPerson)
   db.session.commit()
-  userList = Namez.query.all()
+  userList = Maids.query.all()
   return render_template('admin.html',userList=userList)
 
 ######################################################################
