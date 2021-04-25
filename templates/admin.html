@@ -1,9 +1,9 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %}
 {% block content%}
-<h1>This page displays names for the admin</h1>
-<a href="/adlogout">Logout</a>
+<a href="/adlogout">Logout </a>
+<a href="/add">+Maids</a>
 <br>
-<h1 align="center">Names</h1>
+<h1 align="center">Maids</h1>
 <table class="table">
    <thead>
       <tr>
@@ -12,10 +12,10 @@
       </tr>
    </thead>
    <tbody>
-      {%for person in userList%}
+      {%for maid in userList%}
       <tr>
-         <th scope="row">{{person.id}}</th>
-         <td>{{person.name}}</td>
+         <th scope="row">{{maid.id}}</th>
+         <td>{{maid.name}}</td>
       </tr>
       {%endfor%}
    </tbody>

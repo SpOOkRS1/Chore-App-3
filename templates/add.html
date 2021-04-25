@@ -1,22 +1,14 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} 
 {% block content%}
-<h1>This is the admin page</h1>
-<h1 align="center">Names</h1>
+<h1>Add a Maid</h1>
+<br>
 <div class="container">
-   <nav class="nav">
-      <li class="nav-item"> <a class="nav-link" href={{url_for('home')}}> Home </a> </li>
-      <li class="nav-item"> <a class="nav-link" href={{url_for('add')}}> Add </a> </li>
-   </nav>
-   <div class="jumbotron">
-      <h1>Add a User:</h1>
-      <p>This will add a user to the page</p>
-   </div>
    <form class="form-inline" action="{{url_for('added')}}">
       <div class="form-group mx-sm-3 mb-2">
-         <label for="name">Real Name:</label>
+         <label for="name">Maid:</label>
          <input  class="form-control"type="text" name="name">
       </div>
-      <input class="form-control" type="submit" value="Add User">
+      <input class="form-control" type="submit" value="Add Maid">
    </form>
 </div>
 {% endblock %}
