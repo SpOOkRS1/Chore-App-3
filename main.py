@@ -59,15 +59,17 @@ login_manager.init_app(app)
 def load_user(id):
   return Admins.query.get(int(id))
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
-
+  if request.method == 'POST':
+   return redirect(url_for('maidlogin'))
   return render_template('home.html')
 
-@app.route('/login')
-def login():
-
-  return render_template('login.html')
+@app.route('/maidlogin', methods=['GET', 'POST'])
+def maidlogin():
+  if request.method == 'POST':
+   return redirect(url_for('maidlogin'))
+  return render_template('maidlogin.html')
 
 @app.route('/adsign-up', methods=['GET', 'POST'])
 def adsign_up():

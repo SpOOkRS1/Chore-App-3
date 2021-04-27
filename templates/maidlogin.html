@@ -1,0 +1,19 @@
+<!-- repl name:  IlllIIllIllIllI  -->
+<!--  Goal: make a responsive landing page: Done
+   Goal: create home page for chore calendar
+   Goal: build a backend for data -->
+{% extends "base.html" %} {% block title %}Login{% endblock %} 
+{% block content%}
+<form method="POST">
+   <h3 align="center">Login</h3>
+   <br>
+   <div class ="form-group">
+      <input type="text" class="form-control" id="username" name="username" placeholder="Enter admin username">
+      <input type="text" class="form-control" id="username" name="maid" placeholder="Enter your name">
+   </div>
+   <br>
+   <div align="center">
+      <button type="submit" class="cta">Login</button>
+   </div>
+</form>
+{% endblock %}
